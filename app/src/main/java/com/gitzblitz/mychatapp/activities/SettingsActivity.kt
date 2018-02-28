@@ -12,8 +12,10 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -43,17 +45,25 @@ class SettingsActivity : AppCompatActivity() {
         .child("Users")
         .child(userID)
 
+    mStorageReference = FirebaseStorage.getInstance().reference
+
     mDatabase!!.addValueEventListener(object : ValueEventListener {
 
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         var displayName = dataSnapshot.child("display_name").value
-        var image = dataSnapshot.child("image").value
+        var image = dataSnapshot.child("image").value.toString()
         var userStatus = dataSnapshot.child("status").value
         var thumbnail = dataSnapshot.child("thumb_image").value
 
         settingsDisplayName.text = displayName.toString()
         settingsDisplayStatus.text = userStatus.toString()
 
+        if (!image!!.equals("default")){
+          Picasso.with(applicationContext)
+              .load(image)
+              .placeholder(R.drawable.profile_img)
+              .into(settingsProfileImageView)
+        }
       }
 
       override fun onCancelled(databaseError: DatabaseError) {
@@ -133,7 +143,6 @@ class SettingsActivity : AppCompatActivity() {
                   task: Task<UploadTask.TaskSnapshot> ->
 
                   var thumbUrl = task.result.downloadUrl.toString()
-
                   if (task.isSuccessful) {
                     var updateObject = HashMap<String, Any>()
                     updateObject.put("image", downloadUrl)
@@ -145,14 +154,16 @@ class SettingsActivity : AppCompatActivity() {
                       if (task.isSuccessful) {
                         Toast.makeText(this, "Profile image saved", Toast.LENGTH_LONG).show()
                       } else {
-
+                        Toast.makeText(this, " Profile image not saved. Please try again", Toast.LENGTH_LONG).show()
                       }
                     }
 
                   } else {
-
+                    Toast.makeText(this, " Thumbnail uploaded", Toast.LENGTH_LONG).show()
                   }
                 }
+              } else {
+                Toast.makeText(this, " Image not uploaded", Toast.LENGTH_LONG).show()
               }
             }
       }
