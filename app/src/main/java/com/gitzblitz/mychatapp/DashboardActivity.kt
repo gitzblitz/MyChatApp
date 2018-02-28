@@ -8,5 +8,10 @@ class DashboardActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_dashboard)
+
+   if (intent.extras != null){
+     var userName = intent.extras.get("name")
+     title = userName.toString()
+   }
   }
 }
