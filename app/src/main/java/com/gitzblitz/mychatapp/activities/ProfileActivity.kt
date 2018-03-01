@@ -6,6 +6,8 @@ import com.gitzblitz.mychatapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -38,9 +40,17 @@ class ProfileActivity : AppCompatActivity() {
       }
 
       override fun onDataChange(dataSnapshot: DataSnapshot) {
-        var displayName = dataSnapshot.child("display_name").toString()
-        var status = dataSnapshot.child("status").toString()
-        var profileImage = dataSnapshot.child("image").toString()
+        var displayName = dataSnapshot.child("display_name").value.toString()
+        var status = dataSnapshot.child("status").value.toString()
+        var image = dataSnapshot.child("image").value.toString()
+
+        profileName.text = displayName
+        profileStatus.text = status
+
+        Picasso.with(this@ProfileActivity)
+            .load(image)
+            .placeholder(R.drawable.profile_img)
+            .into(profilePicture)
 
 
       }
