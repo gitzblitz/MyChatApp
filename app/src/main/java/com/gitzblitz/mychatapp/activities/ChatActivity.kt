@@ -57,11 +57,11 @@ class ChatActivity : AppCompatActivity() {
               viewHolder.messengerTextView!!.gravity = (Gravity.CENTER_VERTICAL or Gravity.END)
 
               // get image url for me
-              mDatabase!!.child("users").child(currentUserId).addValueEventListener(object: ValueEventListener{
+              mDatabase!!.child("Users").child(currentUserId).addValueEventListener(object: ValueEventListener{
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                  var imageUrl = dataSnapshot.child("thumb_image").value.toString()
-                  var displayName = dataSnapshot.child("display_name")
+                  var displayName = dataSnapshot.child("display_name").value
 
                   viewHolder.messengerTextView!!.text = displayName.toString()
                   Picasso.with(viewHolder.profileImage!!.context)
@@ -89,7 +89,7 @@ class ChatActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                   var imageUrl = dataSnapshot.child("thumb_image").value.toString()
-                  var displayName = dataSnapshot.child("display_name")
+                  var displayName = dataSnapshot.child("display_name").value
 
                   viewHolder.messengerTextView!!.text = displayName.toString()
                   Picasso.with(viewHolder.profileImage!!.context)
@@ -115,6 +115,16 @@ class ChatActivity : AppCompatActivity() {
 
     sendMessageButton.setOnClickListener {
       if (!intent.extras.get("name").toString().equals("")){
+          var currentUserName = intent.extras.get("name")
+        var mCurrentUserID = mFirebaseUser!!.uid
+
+        var message = ChatMessage(mCurrentUserID,
+            addMessageEdit.text.toString().trim(),
+            currentUserName.toString().trim())
+
+        mDatabase!!.child("messages").push().setValue(message)
+
+        addMessageEdit.setText("")
 
       }
     }
