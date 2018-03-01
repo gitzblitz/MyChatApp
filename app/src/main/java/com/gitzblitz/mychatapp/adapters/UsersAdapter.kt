@@ -4,10 +4,12 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.gitzblitz.mychatapp.R
 import com.gitzblitz.mychatapp.models.Users
 import com.google.firebase.database.DatabaseReference
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
@@ -17,12 +19,19 @@ class UsersAdapter(databaseQuery: DatabaseReference, var context: Context): Fire
     R.layout.users_row,
     UsersAdapter.ViewHolder::class.java,
     databaseQuery) {
-  override fun populateViewHolder(viewHolder: UsersAdapter.ViewHolder?, model: Users?, position: Int) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun populateViewHolder(viewHolder: UsersAdapter.ViewHolder?, user: Users?, position: Int) {
+
+    var userId = getRef(position).key
+    viewHolder!!.bindView(user!!, context)
+
+    viewHolder.itemView.setOnClickListener {
+      //TODO create popup dialog where user can choose to see message or view profile
+      Toast.makeText(context, "User row clicked $userId", Toast.LENGTH_LONG).show()
+    }
   }
 
 
-  inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+   class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
     var userNameTxt: String? = null
     var userStatusTxt: String? = null
@@ -33,6 +42,21 @@ class UsersAdapter(databaseQuery: DatabaseReference, var context: Context): Fire
       var userName = itemView.findViewById<TextView>(R.id.userName)
       var userStatus = itemView.findViewById<TextView>(R.id.userStatus)
       var userProfilePic = itemView.findViewById<CircleImageView>(R.id.usersProfileImageView)
+
+      // set the strings
+
+      userNameTxt = user.display_name
+      userStatusTxt = user.status
+      userProfilePicLink = user.thumb_image
+
+      userName.text = user.display_name
+      userStatus.text = user.status
+
+      Picasso.with(context)
+          .load(userProfilePicLink)
+          .placeholder(R.drawable.profile_img)
+          .into(userProfilePic)
+
     }
 
   }

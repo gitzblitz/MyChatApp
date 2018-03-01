@@ -28,10 +28,12 @@ class DashboardActivity : AppCompatActivity() {
     dashBoarViewPager.adapter = sectionPagerAdapter
     dashboardMainTabs.setupWithViewPager(dashBoarViewPager)
     dashboardMainTabs.setTabTextColors(Color.WHITE,Color.GREEN)
-    if (intent.extras != null) {
-      var userName = intent.extras.get("name")
-      Toast.makeText(this, "username " + userName, Toast.LENGTH_LONG).show()
-    }
+
+
+//    if (intent.extras != null) {
+//      var userName = intent.extras.get("name")
+//      Toast.makeText(this, "username " + userName, Toast.LENGTH_LONG).show()
+//    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
