@@ -29,7 +29,8 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".activities.ProfileActivity"
             android:parentActivityName=".activities.DashboardActivity"/>
-        <activity android:name=".activities.ChatActivity"></activity>
+        <activity android:name=".activities.ChatActivity"
+            android:parentActivityName=".activities.DashboardActivity"/>
     </application>
 
 </manifest>

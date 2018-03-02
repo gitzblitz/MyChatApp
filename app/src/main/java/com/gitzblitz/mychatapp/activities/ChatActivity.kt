@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -16,6 +17,8 @@ import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.custom_bar_image.*
+import kotlinx.android.synthetic.main.custom_bar_image.view.*
 
 class ChatActivity : AppCompatActivity() {
   var userId: String? = null
@@ -31,10 +34,24 @@ class ChatActivity : AppCompatActivity() {
     mFirebaseUser = FirebaseAuth.getInstance().currentUser
 
     userId = intent.extras.getString("userId")
+    var profileImg = intent.extras.getString("profile")
     linearLayoutManager = LinearLayoutManager(this)
     linearLayoutManager!!.stackFromEnd = true
 
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    supportActionBar!!.setDisplayShowCustomEnabled(true)
+
+    var inflater = this.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+    var actionBarView = inflater.inflate(R.layout.custom_bar_image,null)
+    actionBarView.customBarName.text = intent.extras.getString("name").toString()
+
+    Picasso.with(this)
+        .load(profileImg)
+        .placeholder(R.drawable.profile_img)
+        .into(actionBarView.customBarCircleImage)
+
+    supportActionBar!!.customView = actionBarView
 
     mDatabase = FirebaseDatabase.getInstance().reference
 
@@ -63,7 +80,7 @@ class ChatActivity : AppCompatActivity() {
                  var imageUrl = dataSnapshot.child("thumb_image").value.toString()
                   var displayName = dataSnapshot.child("display_name").value
 
-                  viewHolder.messengerTextView!!.text = displayName.toString()
+                  viewHolder.messengerTextView!!.text = "I wrote ..."
                   Picasso.with(viewHolder.profileImage!!.context)
                       .load(imageUrl)
                       .placeholder(R.drawable.profile_img)
@@ -91,7 +108,7 @@ class ChatActivity : AppCompatActivity() {
                   var imageUrl = dataSnapshot.child("thumb_image").value.toString()
                   var displayName = dataSnapshot.child("display_name").value
 
-                  viewHolder.messengerTextView!!.text = displayName.toString()
+                  viewHolder.messengerTextView!!.text = "$displayName wrote ..."
                   Picasso.with(viewHolder.profileImage!!.context)
                       .load(imageUrl)
                       .placeholder(R.drawable.profile_img)

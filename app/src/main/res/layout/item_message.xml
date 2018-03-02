@@ -26,9 +26,22 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:id="@+id/messageImageView"
                 android:src="@drawable/profile_img"
                 android:layout_height="70dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name of messenger"
+                android:padding="2dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:background="@drawable/rounded_corner2"
+                android:layout_toEndOf="@id/messageImageView"
+                android:id="@+id/messengerTextView"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,25 +51,17 @@
                 android:layout_marginStart="4dp"
                 android:text="Message"
                 android:layout_toEndOf="@id/messageImageView"
+                android:layout_below="@id/messengerTextView"
                 android:id="@+id/messageTextView"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="name of messenger"
-                android:padding="2dp"
-                android:textSize="12sp"
-                android:textStyle="italic"
-                android:background="@drawable/rounded_corner2"
-                android:layout_toEndOf="@id/messageImageView"
-                android:layout_below="@id/messageTextView"
-                android:id="@+id/messengerTextView"/>
+
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="70dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
-                android:visibility="visible"
+                android:layout_marginBottom="8dp"
+                android:visibility="invisible"
                 android:id="@+id/messageImageViewRight"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/profile_img"
