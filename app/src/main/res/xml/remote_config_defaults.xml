@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DefaultsMap xmlns:android="http://schemas.android.com/apk/res/android">
+    <entry>
+        <key>welcome_text</key>
+        <value>Welcome to Firebase Chat</value>
+    </entry>
+    <entry>
+        <key>dashboard_title</key>
+        <value>Dashboard</value>
+    </entry>
+
+</DefaultsMap>
