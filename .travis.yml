@@ -1,15 +1,11 @@
 language: android
+jdk: oraclejdk8
 android:
   components:
     - tools
     - platform-tools
     - tools
-
-    # Build tools version
-    - build-tools-26.1.1
-    # SDK version for compiling
+    - build-tools-26.0.2
     - android-26
-
-    #Additional components
+    - extra-android-m2repository
     - extra-google-google_play_services
-    - addon-google_apis-google-26
