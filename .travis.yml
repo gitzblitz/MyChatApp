@@ -1,0 +1,15 @@
+language: android
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+
+    # Build tools version
+    - build-tools-26.1.1
+    # SDK version for compiling
+    - android-26
+
+    #Additional components
+    - extra-google-google_play_services
+    - addon-google_apis-google-26
