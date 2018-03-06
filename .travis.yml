@@ -33,7 +33,7 @@ android:
     - extra-google-m2repository
 
 script:
-  - ./gradlew clean assembleDebug -x library:signArchives -PdisablePreDex
+  - ./gradlew clean assembleDebug
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -43,3 +43,7 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+notifications:
+  slack:
+    rooms:
+      - gitzblitz-tech:eYI9n3JHEGTKMD4tnHGBpu3h#travis-ci
