@@ -17,6 +17,7 @@ android:
     - tools
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-$ANDROID_API_LEVEL
+    - android-$EMULATOR_API_LEVEL
 
     #Google Play services
     - extra-google-google_play_services
@@ -41,17 +42,20 @@ android:
 
 before_script:
   - chmod +x gradlew
-  - android list targets
+  - echo "y" | android update sdk -a --no-ui --filter android-$EMULATOR_API_LEVEL
+  - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
+  - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}'
   - echo no | android create avd --force -n test -t "android-"$EMULATOR_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG
   - QEMU_AUDIO_DRV=none emulator -avd test -no-skin -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
 
 script:
   - echo "Travis branch is $TRAVIS_BRANCH"
   - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
-  - android-wait-for-emulator
   - adb devices
-  - adb shell input keyevent 82 &
-  - ./gradlew connectedCheck
+  - ./gradlew clean check connectedCheck
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
