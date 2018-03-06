@@ -6,9 +6,6 @@ env:
     - ANDROID_API_LEVEL=26
     - EMULATOR_API_LEVEL=24
     - ANDROID_BUILD_TOOLS_VERSION=26.0.2
-    - ANDROID_ABI=armeabi-v7a
-    - ANDROID_TAG=google_apis
-#    - ADB_INSTALL_TIMEOUT=20
 
 android:
   components:
@@ -35,23 +32,8 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
 
-    #System image
-    - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
-    - sys-img-armeabi-v7a-google_apis-$EMULATOR_API_LEVEL
-
-
-before_script:
-  - echo "y" | android update sdk -a --no-ui --filter android-$EMULATOR_API_LEVEL
-  - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
-  - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}'
-  - echo no | android create avd --force -n test -t "android-"$EMULATOR_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG
-  - QEMU_AUDIO_DRV=none emulator -avd test -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
-
 script:
-  - ./gradlew clean check connectedCheck
+  - ./gradlew clean assembleDebug -x library:signArchives -PdisablePreDex
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -61,5 +43,3 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
-before_install:
-  - yes | sdkmanager "platforms;android-"$ANDROID_API_LEVEL
